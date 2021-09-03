@@ -8,8 +8,8 @@
 [crates-url]: https://crates.io/crates/nabo
 [docs-badge]: https://img.shields.io/docsrs/nabo
 [docs-url]: https://docs.rs/nabo
-[ci-badge]: https://img.shields.io/github/workflow/status/enlightware/nabo/CI
-[ci-url]: https://github.com/enlightware/nabo/actions
+[ci-badge]: https://img.shields.io/github/workflow/status/enlightware/nabo-rs/CI
+[ci-url]: https://github.com/enlightware/nabo-rs/actions
 
 ## Overview
 
