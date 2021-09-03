@@ -1,0 +1,42 @@
+[package]
+name = "nabo"
+version = "0.1.0"
+edition = "2018"
+authors = ["Stéphane Magnenat <stephane.magnenat@enlightware.ch>", "Hannes Sommer <hannes.sommer@enlightware.ch>"]
+license = "MIT OR Apache-2.0"
+description = "A fast K Nearest Neighbor library for low-dimensional spaces"
+repository = "https://github.com/enlightware/nabo-rs"
+homepage = "https://github.com/enlightware/nabo-rs"
+readme = "README.md"
+keywords = ["nearest neighbor search", "k-d tree", "data structures", "shape registration"]
+categories = ["mathematics", "science", "computer-vision", "multimedia", "game-development"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+default = ["dummy_point"]
+dummy_point = ["rand"]
+
+[dependencies]
+partition = "0.1.2"
+num-traits = "0.2"
+ordered-float = "2.7.0"
+rand = { version = "0.8", optional = true }
+
+[dev-dependencies]
+rand = "0.8"
+float-cmp = "0.9"
+criterion = "0.3"
+
+[profile.release]
+debug = 1
+
+[[bench]]
+name = "candidate_container_comparison"
+harness = false
+required-features = ["dummy_point"]
+
+[[bench]]
+name = "simple"
+harness = false
+required-features = ["dummy_point"]
