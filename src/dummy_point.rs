@@ -58,7 +58,7 @@ impl Display for P2 {
 }
 
 /// Creates a random point whose coordinate are in the interval [-100:100].
-pub fn rand_point() -> P2 {
+pub fn random_point() -> P2 {
     let mut rng = rand::thread_rng();
     P2([
         NotNan::new(rng.gen_range(-100.0..100.0)).unwrap(),
@@ -66,7 +66,7 @@ pub fn rand_point() -> P2 {
     ])
 }
 
-/// Creates a random cloud of count points using [rand_point()] for each.
-pub fn cloud_random(count: u32) -> Vec<P2> {
-    (0..count).map(|_| rand_point()).collect()
+/// Creates a random cloud of count points using [random_point()] for each.
+pub fn random_point_cloud(count: u32) -> Vec<P2> {
+    (0..count).map(|_| random_point()).collect()
 }

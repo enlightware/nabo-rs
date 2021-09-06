@@ -9,21 +9,21 @@
 //! ```
 //! use nabo::dummy_point::*;
 //! use nabo::KDTree;
-//! let cloud = cloud_random(10000);
+//! let cloud = random_point_cloud(10000);
 //! let tree = KDTree::new(&cloud);
-//! let query = rand_point();
+//! let query = random_point();
 //! let neighbour = tree.knn(3, &query);
 //! ```
 //!
-//! If you want to have more control, on the search, you can use the advance API:
+//! If you want to have more control on the search, you can use the advanced API:
 //! ```
 //! use nabo::dummy_point::*;
 //! use nabo::KDTree;
 //! use nabo::CandidateContainer;
 //! use nabo::Parameters;
-//! let cloud = cloud_random(10000);
+//! let cloud = random_point_cloud(10000);
 //! let tree = KDTree::new(&cloud);
-//! let query = rand_point();
+//! let query = random_point();
 //! let mut touch_count = 0;
 //! let neighbour = tree.knn_advanced(
 //!     3,
@@ -67,9 +67,9 @@ impl<T: Float + AddAssign + std::fmt::Debug> Scalar for T {}
 
 /// A point in the space to be searched
 pub trait Point<T: Scalar>: Default {
-    /// Sets the value for a given index, which must be within `0..DIM`.
+    /// Sets the value for the `i`-the component, `i` must be within `0..DIM`.
     fn set(&mut self, i: u32, value: NotNan<T>);
-    /// Gets the value for a given index, which must be within `0..DIM`.
+    /// Gets the value for the `i`-the component, `i` must be within `0..DIM`.
     fn get(&self, i: u32) -> NotNan<T>;
     /// The number of dimension of the space this point lies in.
     const DIM: u32;
@@ -487,7 +487,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use dummy_point::{cloud_random, rand_point, P2};
+    use dummy_point::{random_point_cloud, random_point, P2};
     use float_cmp::approx_eq;
 
     // helpers to create cloud
@@ -549,7 +549,7 @@ mod tests {
     // tests themselves
 
     #[test]
-    fn test_get_build_points_bounds() {
+    fn get_build_points_bounds() {
         let cloud = cloud3();
         let indices = vec![0, 1, 2];
         let bounds = KDTree::get_build_points_bounds(&cloud, &indices);
@@ -558,7 +558,7 @@ mod tests {
     }
 
     #[test]
-    fn test_max_delta_index() {
+    fn max_delta_index() {
         let b = |x: f32, y: f32| {
             [
                 NotNan::<f32>::new(x).unwrap(),
@@ -580,14 +580,14 @@ mod tests {
     }
 
     #[test]
-    fn test_new() {
+    fn new_tree() {
         let cloud = cloud3();
         let tree = KDTree::new_with_bucket_size(&cloud, 2);
         dbg!(tree);
     }
 
     #[test]
-    fn test_1nn_allow_self() {
+    fn query_1nn_allow_self() {
         let mut touch_sum = 0;
         const PASS_COUNT: u32 = 20;
         const QUERY_COUNT: u32 = 100;
@@ -599,10 +599,10 @@ mod tests {
             sort_results: true,
         };
         for _ in 0..PASS_COUNT {
-            let cloud = cloud_random(CLOUD_SIZE);
+            let cloud = random_point_cloud(CLOUD_SIZE);
             let tree = KDTree::new(&cloud);
             for _ in 0..QUERY_COUNT {
-                let query = rand_point();
+                let query = random_point();
                 let mut touch_statistics = 0;
 
                 // linear search
@@ -642,7 +642,7 @@ mod tests {
     }
 
     #[test]
-    fn test_knn_allow_self() {
+    fn query_knn_allow_self() {
         const QUERY_COUNT: u32 = 100;
         const CLOUD_SIZE: u32 = 1000;
         const PARAMETERS: Parameters<f32> = Parameters {
@@ -651,11 +651,11 @@ mod tests {
             allow_self_match: true,
             sort_results: true,
         };
-        let cloud = cloud_random(CLOUD_SIZE);
+        let cloud = random_point_cloud(CLOUD_SIZE);
         let tree = KDTree::new(&cloud);
         for k in [1, 2, 3, 5, 7, 13] {
             for _ in 0..QUERY_COUNT {
-                let query = rand_point();
+                let query = random_point();
                 // brute force
                 let nns_bf_lin = brute_force_knn::<Vec<InternalNeighbour<f32>>>(&cloud, &query, k);
                 assert_eq!(nns_bf_lin.len(), k as usize);
