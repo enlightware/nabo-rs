@@ -487,7 +487,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
 #[cfg(test)]
 mod tests {
     use crate::*;
-    use dummy_point::{random_point_cloud, random_point, P2};
+    use dummy_point::{random_point, random_point_cloud, P2};
     use float_cmp::approx_eq;
 
     // helpers to create cloud
