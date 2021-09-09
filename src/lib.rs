@@ -83,7 +83,7 @@ pub trait Point<T: Scalar>: Default {
 
 /// Helper function to compute the square distance between two points given as slice
 #[inline]
-fn slice_dist2<T: Scalar, P: Point<T>>(lhs: &[NotNan<T>], rhs: &[NotNan<T>]) -> NotNan<T> {
+fn point_slice_dist2<T: Scalar, P: Point<T>>(lhs: &[NotNan<T>], rhs: &[NotNan<T>]) -> NotNan<T> {
     let mut dist2 = NotNan::<T>::zero();
     for index in 0..P::DIM {
         let index = index as usize;
@@ -371,7 +371,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
                 for bucket_index in bucket_start_index..bucket_end_index {
                     let point_index = (bucket_index * P::DIM) as usize;
                     let point = &self.points[point_index..point_index + (P::DIM as usize)];
-                    let dist2 = slice_dist2::<T, P>(query, point);
+                    let dist2 = point_slice_dist2::<T, P>(query, point);
                     let epsilon = NotNan::new(T::epsilon()).unwrap();
                     let InternalParameters {
                         max_radius2,
