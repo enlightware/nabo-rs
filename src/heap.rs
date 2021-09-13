@@ -45,6 +45,18 @@ impl<T: Scalar> CandidateHeap<T> for BinaryHeap<InternalNeighbour<T>> {
     }
 }
 
+fn keep_finite_elements<T: Scalar>(v: Vec<InternalNeighbour<T>>) -> Vec<InternalNeighbour<T>> {
+    let pos = v.iter().position(|n| n.dist2.into_inner() == T::infinity());
+    match pos {
+        None => v,
+        Some(pos) => {
+            let mut v = v;
+            v.truncate(pos);
+            v
+        }
+    }
+}
+
 impl<T: Scalar> CandidateHeap<T> for Vec<InternalNeighbour<T>> {
     fn new_with_k(k: u32) -> Self {
         vec![
@@ -75,10 +87,10 @@ impl<T: Scalar> CandidateHeap<T> for Vec<InternalNeighbour<T>> {
         self[self.len() - 1].dist2
     }
     fn into_vec(self) -> Vec<InternalNeighbour<T>> {
-        self
+        keep_finite_elements(self)
     }
     fn into_sorted_vec(self) -> Vec<InternalNeighbour<T>> {
-        self
+        keep_finite_elements(self)
     }
 }
 
@@ -104,5 +116,36 @@ impl<T: Scalar> CandidateHeap<T> for InternalNeighbour<T> {
     }
     fn into_sorted_vec(self) -> Vec<InternalNeighbour<T>> {
         vec![self]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::infinite::HasInfinite;
+    use crate::*;
+    #[test]
+    fn keep_finite_elements() {
+        let v = vec![
+            InternalNeighbour {
+                index: 0,
+                dist2: NotNan::<f32>::zero(),
+            },
+            InternalNeighbour {
+                index: 0,
+                dist2: NotNan::<f32>::infinite(),
+            },
+            InternalNeighbour {
+                index: 0,
+                dist2: NotNan::<f32>::infinite(),
+            },
+        ];
+        let finite_v = crate::heap::keep_finite_elements(v);
+        assert_eq!(
+            finite_v,
+            vec![InternalNeighbour {
+                index: 0,
+                dist2: NotNan::<f32>::zero(),
+            }]
+        );
     }
 }

@@ -4,7 +4,7 @@ use std::cmp::Ordering;
 use crate::infinite::HasInfinite;
 
 /// An internal representation of neighbour, to avoid copying the point around
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub(crate) struct InternalNeighbour<T: Float> {
     /// the index of this point
     pub(crate) index: u32,

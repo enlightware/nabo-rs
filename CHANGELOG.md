@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 0.2.1 - 2021-09-13
+
+* Fixed linear candidate container to return less than k entries rather than entries with infinity if not enough neighbours can be found.
+
 ### 0.2.0 - 2021-09-06
 
 * Improved documentation.

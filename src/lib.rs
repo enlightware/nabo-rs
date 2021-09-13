@@ -97,6 +97,7 @@ fn point_slice_dist2<T: Scalar, P: Point<T>>(lhs: &[NotNan<T>], rhs: &[NotNan<T>
 pub type Index = u32;
 
 /// A neighbour resulting from the search
+#[derive(Debug)]
 pub struct Neighbour<T: Scalar, P: Point<T>> {
     /// the point itself
     pub point: P,
@@ -189,6 +190,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
 
     /// Finds the `k` nearest neighbour of `query`, using reasonable default parameters.
     ///
+    /// If there are less than `k` points in the point cloud, the returned vector will be smaller than `k`.
     /// The default parameters are:
     /// Exact search, no max. radius, allowing self matching, sorting results, and not collecting statistics.
     /// If `k` <= 16, a linear vector is used to keep track of candidates, otherwise a binary heap is used.
@@ -214,6 +216,8 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
 
     /// Finds the `k` nearest neighbour of `query`, with user-provided parameters.
     ///
+    /// If there are less than `k` points in the point cloud or in the ball around `query`
+    /// defined by `parameters.max_radius`, the returned vector will be smaller than `k`.
     /// The parameters are:
     /// * `candidate_container` which container to use to collect candidates,
     /// * `parameters` the advanced search parameters,
@@ -706,6 +710,34 @@ mod tests {
                     assert!(approx_eq!(f32, *nn_bin.dist2, *nn_bf_lin.dist2, ulps = 2));
                 }
             }
+        }
+    }
+
+    #[test]
+    fn small_clouds_can_lead_to_neighbours() {
+        let cloud = vec![P2::new(0.0, 0.0), P2::new(1.0, 0.0)];
+        let tree = KDTree::new(&cloud);
+        let query = P2::new(0.5, 0.0);
+        for _ in [CandidateContainer::Linear, CandidateContainer::BinaryHeap] {
+            let nns = tree.knn(3, &query);
+            assert_eq!(nns.len(), 2);
+        }
+    }
+
+    #[test]
+    fn max_radius_can_lead_to_neighbours() {
+        let cloud = vec![P2::new(0.0, 0.0), P2::new(1.0, 0.0)];
+        let tree = KDTree::new(&cloud);
+        let query = P2::new(0.1, 0.0);
+        let parameters = Parameters {
+            epsilon: 0.0,
+            max_radius: 0.5,
+            allow_self_match: false,
+            sort_results: false,
+        };
+        for container in [CandidateContainer::Linear, CandidateContainer::BinaryHeap] {
+            let nns = tree.knn_advanced(2, &query, container, &parameters, None);
+            assert_eq!(nns.len(), 1);
         }
     }
 }
