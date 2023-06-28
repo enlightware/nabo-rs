@@ -135,7 +135,7 @@ type Nodes<T, P> = Vec<Node<T, P>>;
 /// This implementation is inspired of the variant `KDTreeUnbalancedPtInLeavesImplicitBoundsStackOpt` in libnabo C++.
 /// Contrary to the latter, it does not keep a reference to the point cloud but copies the point.
 /// It retains their index though.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct KDTree<T: Scalar, P: Point<T>> {
     /// size of a bucket
     bucket_size: u32,

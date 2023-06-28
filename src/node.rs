@@ -5,6 +5,7 @@ use ordered_float::NotNan;
 use crate::{Point, Scalar};
 
 /// Either a split value or the index of the first point in the bucket
+#[derive(Clone, Copy)]
 union SplitValOrBucketIndex<T: Scalar> {
     /// for split node, split value
     split_val: NotNan<T>,
@@ -25,6 +26,7 @@ fn create_dim_child_bucket_size<T: Scalar, P: Point<T>>(
 /// If split node, it holds a split dimension and the split value along this dimension,
 /// and the index of its right child (its left child is its own index + 1).
 /// If leaf node, it holds the start index of the bucket and the number of elements in the bucket.
+#[derive(Clone)]
 pub(crate) struct Node<T: Scalar, P: Point<T>> {
     /// cut dimension for split nodes (dim_bit_count lsb), index of right node or number of points in bucket (rest).
     /// Note that left index is current + 1.
