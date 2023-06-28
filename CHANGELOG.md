@@ -1,5 +1,11 @@
 ### Unreleased
 
+### 0.3.0 - 2023-06-28
+
+* Derive `Clone` trait for `KDTree`.
+* Switched to Rust 2021 edition.
+* Updated `ordered-float` to version 3.7 and `criterion` to version 0.5.
+
 ### 0.2.1 - 2021-09-13
 
 * Fixed linear candidate container to return less than k entries rather than entries with infinity if not enough neighbours can be found.
