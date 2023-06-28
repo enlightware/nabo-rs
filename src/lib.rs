@@ -282,7 +282,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
         let mut heap = H::new_with_k(k);
         #[cfg_attr(rustfmt, rustfmt_skip)]
         let leaf_touched_count = self.recurse_knn(
-            k, query,
+            query,
             0, NotNan::<T>::zero(),
             &mut heap, &mut off,
             internal_parameters,
@@ -300,7 +300,6 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
     #[allow(clippy::too_many_arguments)]
     fn recurse_knn<H: CandidateHeap<T>>(
         &self,
-        k: u32,
         query: &[NotNan<T>],
         node: usize,
         rd: NotNan<T>,
@@ -326,7 +325,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
                 if new_off > NotNan::<T>::zero() {
                     #[cfg_attr(rustfmt, rustfmt_skip)]
                     let mut leaf_visited_count = self.recurse_knn(
-                        k, query,
+                        query,
                         right_child, rd,
                         heap, off,
                         internal_parameters,
@@ -336,7 +335,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
                         off[split_dim] = new_off;
                         #[cfg_attr(rustfmt, rustfmt_skip)]
                         let new_visits= self.recurse_knn(
-                            k, query,
+                            query,
                             left_child, rd,
                             heap, off,
                             internal_parameters,
@@ -348,7 +347,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
                 } else {
                     #[cfg_attr(rustfmt, rustfmt_skip)]
                     let mut leaf_visited_count = self.recurse_knn(
-                        k, query,
+                        query,
                         left_child, rd,
                         heap, off,
                         internal_parameters,
@@ -358,7 +357,7 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
                         off[split_dim] = new_off;
                         #[cfg_attr(rustfmt, rustfmt_skip)]
                         let new_visits = self.recurse_knn(
-                            k, query,
+                            query,
                             right_child, rd,
                             heap, off,
                             internal_parameters,
