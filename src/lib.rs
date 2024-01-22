@@ -485,6 +485,23 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
             index: self.indices[neighbour.index as usize],
         }
     }
+
+    /// Iterate over the indices and points in this KDTree.
+    /// The order is arbitrary;
+    /// the indices are the point's location in the slice
+    /// from which the tree was built.
+    pub fn iter(&self) -> impl Iterator<Item = (u32, P)> + '_ {
+        self.indices
+            .iter()
+            .zip(self.points.as_slice().chunks(P::DIM as usize))
+            .map(|(idx, x)| {
+                let mut p = P::default();
+                for (d, v) in x.iter().enumerate() {
+                    p.set(d as u32, *v);
+                }
+                (*idx, p)
+            })
+    }
 }
 
 #[cfg(test)]
