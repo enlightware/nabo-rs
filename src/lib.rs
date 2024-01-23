@@ -55,7 +55,7 @@ use internal_parameters::InternalParameters;
 use node::Node;
 use num_traits::{clamp_max, clamp_min, Bounded, Zero};
 use ordered_float::Float;
-pub use ordered_float::NotNan;
+pub use ordered_float::{FloatIsNan, NotNan};
 use std::{collections::BinaryHeap, ops::AddAssign};
 
 use heap::CandidateHeap;
@@ -79,6 +79,30 @@ pub trait Point<T: Scalar>: Default {
     const DIM_MASK: u32 = (1 << Self::DIM_BIT_COUNT) - 1;
     /// Derived from `DIM`, do not reimplement, use the default!
     const MAX_NODE_COUNT: u32 = ((1u64 << (32 - Self::DIM_BIT_COUNT)) - 1) as u32;
+
+    /// Construct from a slice of valid axis values.
+    ///
+    /// If the slice is too short, the point will be right-filled as `Point::default()`.
+    /// if it is too long, the extra elements will be ignored.
+    fn from_slice(values: &[NotNan<T>]) -> Self {
+        let mut p = Self::default();
+        for (idx, v) in values.iter().take(Self::DIM as usize).enumerate() {
+            p.set(idx as u32, *v);
+        }
+        p
+    }
+
+    /// Construct from a slice of raw axis values.
+    ///
+    /// If the slice is too short, the point will be right-filled as `Point::default()`.
+    /// if it is too long, the extra elements will be ignored.
+    fn from_raw(values: &[T]) -> Result<Self, FloatIsNan> {
+        let mut p = Self::default();
+        for (idx, v) in values.iter().take(Self::DIM as usize).enumerate() {
+            p.set(idx as u32, NotNan::new(*v)?);
+        }
+        Ok(p)
+    }
 }
 
 /// Helper function to compute the square distance between two points given as slice
@@ -484,6 +508,22 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
             dist2: neighbour.dist2,
             index: self.indices[neighbour.index as usize],
         }
+    }
+
+    /// Iterate over the indices and points in this KDTree.
+    /// The order is arbitrary;
+    /// the indices are the point's location in the slice
+    /// from which the tree was built.
+    pub fn iter_idx_points(&self) -> impl Iterator<Item = (u32, P)> + '_ {
+        self.indices.iter().cloned().zip(self.iter_points())
+    }
+
+    /// Iterate over the points in this KDTree in arbitrary order.
+    pub fn iter_points(&self) -> impl Iterator<Item = P> + '_ {
+        self.points
+            .as_slice()
+            .chunks(P::DIM as usize)
+            .map(P::from_slice)
     }
 }
 
