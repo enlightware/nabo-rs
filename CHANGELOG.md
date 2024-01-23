@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Added functions to iterate over the points of the tree.
+
 ### 0.3.0 - 2023-06-28
 
 * Derive `Clone` trait for `KDTree`.
