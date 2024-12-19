@@ -1,3 +1,4 @@
+#![no_std]
 #![warn(missing_docs)]
 
 //! A fast K Nearest Neighbour library for low-dimensional spaces.
@@ -7,7 +8,7 @@
 //!
 //! # Example
 //! ```
-//! use nabo::dummy_point::*;
+//! use nabo::simple_point::*;
 //! use nabo::KDTree;
 //! let cloud = random_point_cloud(10000);
 //! let tree = KDTree::new(&cloud);
@@ -17,7 +18,7 @@
 //!
 //! If you want to have more control on the search, you can use the advanced API:
 //! ```
-//! use nabo::dummy_point::*;
+//! use nabo::simple_point::*;
 //! use nabo::KDTree;
 //! use nabo::CandidateContainer;
 //! use nabo::Parameters;
@@ -39,31 +40,29 @@
 //! );
 //! ```
 
-// We forbid the clippy lint here because it suggests to use #[rustfmt::skip],
-// which is experimental. See: https://github.com/rust-lang/rust/issues/88591
-#![allow(clippy::deprecated_cfg_attr)]
+extern crate alloc;
 
-#[cfg(any(test, feature = "dummy_point"))]
-pub mod dummy_point;
 mod heap;
 mod infinite;
 mod internal_neighbour;
 mod internal_parameters;
 mod node;
+pub mod simple_point;
 
+use alloc::{collections::BinaryHeap, vec, vec::Vec};
+use core::ops::AddAssign;
 use internal_parameters::InternalParameters;
 use node::Node;
 use num_traits::{clamp_max, clamp_min, Bounded, Zero};
-use ordered_float::Float;
+use ordered_float::FloatCore;
 pub use ordered_float::{FloatIsNan, NotNan};
-use std::{collections::BinaryHeap, ops::AddAssign};
 
 use heap::CandidateHeap;
 use internal_neighbour::InternalNeighbour;
 
 /// The scalar type for points in the space to be searched
-pub trait Scalar: Float + AddAssign + std::fmt::Debug {}
-impl<T: Float + AddAssign + std::fmt::Debug> Scalar for T {}
+pub trait Scalar: FloatCore + AddAssign + core::fmt::Debug {}
+impl<T: FloatCore + AddAssign + core::fmt::Debug> Scalar for T {}
 
 /// A point in the space to be searched
 pub trait Point<T: Scalar>: Default {
@@ -529,9 +528,11 @@ impl<T: Scalar, P: Point<T>> KDTree<T, P> {
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
     use crate::*;
-    use dummy_point::{random_point, random_point_cloud, P2};
     use float_cmp::approx_eq;
+    use simple_point::{random_point, random_point_cloud, P2};
+    use std::{dbg, println};
 
     // helpers to create cloud
     fn cloud3() -> Vec<P2> {

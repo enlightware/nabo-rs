@@ -1,4 +1,6 @@
-use std::collections::BinaryHeap;
+use alloc::collections::BinaryHeap;
+use alloc::vec;
+use alloc::vec::Vec;
 
 use ordered_float::NotNan;
 

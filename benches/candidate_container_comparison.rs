@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
-use nabo::dummy_point::*;
+use nabo::simple_point::*;
 use nabo::CandidateContainer;
 use nabo::KDTree;
 use nabo::Parameters;
@@ -28,7 +28,7 @@ fn bench_candidate_container_types(c: &mut Criterion) {
             |b, (k, tree, queries)| {
                 b.iter(|| {
                     for query in *queries {
-                        #[cfg_attr(rustfmt, rustfmt_skip)]
+                        #[rustfmt::skip]
                         tree.knn_advanced(
                             *k, query,
                             CandidateContainer::BinaryHeap,
@@ -45,7 +45,7 @@ fn bench_candidate_container_types(c: &mut Criterion) {
             |b, (k, tree, queries)| {
                 b.iter(|| {
                     for query in *queries {
-                        #[cfg_attr(rustfmt, rustfmt_skip)]
+                        #[rustfmt::skip]
                         tree.knn_advanced(
                             *k, query,
                             CandidateContainer::Linear,

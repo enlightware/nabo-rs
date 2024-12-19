@@ -19,9 +19,11 @@ This work has been sponsored by [Enlightware GmbH](https://enlightware.ch).
 
 ## Usage
 
-To use nabo in your project, you need to implement the `nabo::Point` trait for your point type.
-You can see an example in `src/dummy_point` which is available when nabo is compiled with the `dummy_point` feature (default).
-If you want to avoid a dependency to `rand`, disable the `dummy_point` feature.
+To use nabo in your project, you need either:
+- Use `src/simple_point`.
+- Implement the `nabo::Point` trait for your point type.
+
+If you want to avoid a dependency to `rand`, disable the `rand` feature.
 
 ## Benchmark
 

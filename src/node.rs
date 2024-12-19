@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use core::marker::PhantomData;
 
 use ordered_float::NotNan;
 
@@ -79,8 +79,8 @@ impl<T: Scalar, P: Point<T>> Node<T, P> {
         }
     }
 }
-impl<T: Scalar, P: Point<T>> std::fmt::Debug for Node<T, P> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl<T: Scalar, P: Point<T>> core::fmt::Debug for Node<T, P> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         self.dispatch_on_type(
             f,
             |f, split_dim, split_val, right_child| {
@@ -102,8 +102,10 @@ impl<T: Scalar, P: Point<T>> std::fmt::Debug for Node<T, P> {
 
 #[cfg(test)]
 mod tests {
-    use crate::dummy_point::P2;
+    extern crate std;
+    use crate::simple_point::P2;
     use crate::*;
+    use std::dbg;
 
     #[test]
     fn sizes() {

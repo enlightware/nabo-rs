@@ -1,11 +1,12 @@
 //! A simple 2-D point for testing
 
-use ordered_float::NotNan;
-use rand::Rng;
-use std::{
+use core::{
     fmt::Display,
     ops::{Add, Sub},
 };
+use ordered_float::NotNan;
+#[cfg(any(feature = "rand", test))]
+use rand::Rng;
 
 use num_traits::Bounded;
 
@@ -52,12 +53,13 @@ impl Sub for P2 {
     }
 }
 impl Display for P2 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "[{}, {}]", self.0[0], self.0[1])
     }
 }
 
 /// Creates a random point whose coordinate are in the interval [-100:100].
+#[cfg(any(feature = "rand", test))]
 pub fn random_point() -> P2 {
     let mut rng = rand::thread_rng();
     P2([
@@ -67,6 +69,7 @@ pub fn random_point() -> P2 {
 }
 
 /// Creates a random cloud of count points using [random_point()] for each.
-pub fn random_point_cloud(count: u32) -> Vec<P2> {
+#[cfg(any(feature = "rand", test))]
+pub fn random_point_cloud(count: u32) -> alloc::vec::Vec<P2> {
     (0..count).map(|_| random_point()).collect()
 }

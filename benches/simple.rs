@@ -1,4 +1,9 @@
-use nabo::dummy_point::*;
+#![no_std]
+
+extern crate alloc;
+
+use alloc::vec::Vec;
+use nabo::simple_point::*;
 use nabo::KDTree;
 
 fn main() {

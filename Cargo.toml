@@ -1,6 +1,6 @@
 [package]
 name = "nabo"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 authors = ["Stéphane Magnenat <stephane.magnenat@enlightware.ch>", "Hannes Sommer <hannes.sommer@enlightware.ch>"]
 license = "MIT OR Apache-2.0"
@@ -14,13 +14,13 @@ categories = ["mathematics", "science", "computer-vision", "multimedia", "game-d
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = ["dummy_point"]
-dummy_point = ["rand"]
+default = ["rand"]
+rand = ["dep:rand"]
 
 [dependencies]
 partition = "0.1.2"
-num-traits = "0.2"
-ordered-float = "3.7.0"
+num-traits = { version = "0.2", default-features = false, features = ["libm"] }
+ordered-float = { version = "4.6", default-features = false, features = ["libm"] }
 rand = { version = "0.8", optional = true }
 
 [dev-dependencies]
@@ -34,9 +34,9 @@ debug = 1
 [[bench]]
 name = "candidate_container_comparison"
 harness = false
-required-features = ["dummy_point"]
+required-features = ["rand"]
 
 [[bench]]
 name = "simple"
 harness = false
-required-features = ["dummy_point"]
+required-features = ["rand"]
