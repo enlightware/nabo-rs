@@ -40,6 +40,10 @@
 //! );
 //! ```
 
+// We forbid the clippy lint here because it suggests to use #[rustfmt::skip],
+// which is experimental. See: https://github.com/rust-lang/rust/issues/88591
+#![allow(clippy::deprecated_cfg_attr)]
+
 extern crate alloc;
 
 mod heap;
