@@ -17,6 +17,8 @@ nabo is a fast K Nearest Neighbour (KNN) library for low-dimensional spaces.
 It is a re-implementation in pure Rust of the [C++ library of the same name](https://github.com/ethz-asl/libnabo) by its [original author](http://stephane.magnenat.net).
 This work has been sponsored by [Enlightware GmbH](https://enlightware.ch).
 
+nabo is `no_std` compatible.
+
 ## Usage
 
 To use nabo in your project, you need either:
