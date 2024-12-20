@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 0.5.0 - 2024-12-20
+
+* Generalized `simple_point`'s `P2` struct to the `SimplePoint` struct generic over its `D` dimensions.
+
 ### 0.4.0 - 2024-12-20
 
 * Made `nabo` `no_std` compatible.
