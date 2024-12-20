@@ -21,11 +21,12 @@ nabo is `no_std` compatible.
 
 ## Usage
 
-To use nabo in your project, you need either:
-- Use `src/simple_point`.
-- Implement the `nabo::Point` trait for your point type.
+To use nabo in your project, you need to either:
+- Use `nabo::simple_point::SimplePoint` as your point type.
+- Implement the `nabo::Point` trait for your own point type.
 
 If you want to avoid a dependency to `rand`, disable the `rand` feature.
+In that case, the random generation of point clouds for `SimplePoint` will not be available.
 
 ## Benchmark
 

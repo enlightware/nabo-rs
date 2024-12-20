@@ -15,7 +15,7 @@ fn bench_candidate_container_types(c: &mut Criterion) {
         allow_self_match: true,
         sort_results: true,
     };
-    let cloud = random_point_cloud(CLOUD_SIZE);
+    let cloud = random_point_cloud::<2>(CLOUD_SIZE);
     let tree = KDTree::new(&cloud);
     let queries = (0..QUERY_COUNT).map(|_| random_point()).collect::<Vec<_>>();
     let mut group = c.benchmark_group("CandidateContainerType");

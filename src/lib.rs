@@ -10,7 +10,7 @@
 //! ```
 //! use nabo::simple_point::*;
 //! use nabo::KDTree;
-//! let cloud = random_point_cloud(10000);
+//! let cloud = random_point_cloud::<2>(10000);
 //! let tree = KDTree::new(&cloud);
 //! let query = random_point();
 //! let neighbour = tree.knn(3, &query);
@@ -22,7 +22,7 @@
 //! use nabo::KDTree;
 //! use nabo::CandidateContainer;
 //! use nabo::Parameters;
-//! let cloud = random_point_cloud(10000);
+//! let cloud = random_point_cloud::<2>(10000);
 //! let tree = KDTree::new(&cloud);
 //! let query = random_point();
 //! let mut touch_count = 0;
@@ -540,7 +540,7 @@ mod tests {
 
     // helpers to create cloud
     fn cloud3() -> Vec<P2> {
-        vec![P2::new(0., 0.), P2::new(-1., 3.), P2::new(2., -4.)]
+        vec![P2::new2d(0., 0.), P2::new2d(-1., 3.), P2::new2d(2., -4.)]
     }
 
     // helper to compute the square distance between two points
@@ -759,9 +759,9 @@ mod tests {
 
     #[test]
     fn small_clouds_can_lead_to_neighbours() {
-        let cloud = vec![P2::new(0.0, 0.0), P2::new(1.0, 0.0)];
+        let cloud = vec![P2::new2d(0.0, 0.0), P2::new2d(1.0, 0.0)];
         let tree = KDTree::new(&cloud);
-        let query = P2::new(0.5, 0.0);
+        let query = P2::new2d(0.5, 0.0);
         for _ in [CandidateContainer::Linear, CandidateContainer::BinaryHeap] {
             let nns = tree.knn(3, &query);
             assert_eq!(nns.len(), 2);
@@ -770,9 +770,9 @@ mod tests {
 
     #[test]
     fn max_radius_can_lead_to_neighbours() {
-        let cloud = vec![P2::new(0.0, 0.0), P2::new(1.0, 0.0)];
+        let cloud = vec![P2::new2d(0.0, 0.0), P2::new2d(1.0, 0.0)];
         let tree = KDTree::new(&cloud);
-        let query = P2::new(0.1, 0.0);
+        let query = P2::new2d(0.1, 0.0);
         let parameters = Parameters {
             epsilon: 0.0,
             max_radius: 0.5,
