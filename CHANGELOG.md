@@ -1,6 +1,6 @@
 ### Unreleased
 
-### 0.4.0 - 0224-12-20
+### 0.4.0 - 2024-12-20
 
 * Made `nabo` `no_std` compatible.
 * Renamed `dummy_point` as `simple_point`.
