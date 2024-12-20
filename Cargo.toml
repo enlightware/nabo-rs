@@ -10,6 +10,7 @@ homepage = "https://github.com/enlightware/nabo-rs"
 readme = "README.md"
 keywords = ["nearest_neighbor", "K-D_tree", "data_structures", "KNN", "no_std"]
 categories = ["mathematics", "science", "computer-vision", "multimedia", "game-development"]
+rust-version = "1.63"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
