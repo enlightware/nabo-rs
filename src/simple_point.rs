@@ -6,7 +6,7 @@ use core::{
 };
 use ordered_float::NotNan;
 #[cfg(any(feature = "rand", test))]
-use rand::Rng;
+use rand::RngExt;
 
 use num_traits::Bounded;
 
@@ -80,9 +80,9 @@ pub type P3 = SimplePoint<3>;
 /// Creates a random point whose coordinate are in the interval [-100:100].
 #[cfg(any(feature = "rand", test))]
 pub fn random_point<const D: usize>() -> SimplePoint<D> {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     SimplePoint(core::array::from_fn(|_| {
-        NotNan::new(rng.gen_range(-100.0..100.0)).unwrap()
+        NotNan::new(rng.random_range(-100.0..100.0)).unwrap()
     }))
 }
 
