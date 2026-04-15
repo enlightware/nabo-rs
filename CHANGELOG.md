@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 0.6.0 - 2026-04-15
+
+* Updated dependencies: `rand` to version 0.10.1.
+
 ### 0.5.0 - 2024-12-20
 
 * Generalized `simple_point`'s `P2` struct to the `SimplePoint` struct generic over its `D` dimensions.
